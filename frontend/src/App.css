@@ -1,0 +1,12 @@
+:root { --pantry-green: #2ecc71; }
+body, html, #root { margin: 0; height: 100%; font-family: sans-serif; }
+.login-container { display: flex; height: 100vh; }
+.hero-section { flex: 1; background: var(--pantry-green); color: white; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+.form-section { flex: 1; background: #f9f9f7; display: flex; align-items: center; justify-content: center; }
+.login-box { width: 350px; }
+.sign-in-btn { width: 100%; padding: 12px; background: var(--pantry-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+input { width: 100%; padding: 10px; margin: 10px 0 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+.dashboard-container { max-width: 800px; margin: 50px auto; padding: 20px; }
+table { width: 100%; border-collapse: collapse; }
+th { background: #4caf50; color: white; padding: 12px; }
+td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }

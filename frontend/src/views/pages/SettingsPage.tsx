@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useApp } from "@/context/AppContext";
-import { User, Bell, Palette, Shield, ChevronRight, Moon, Sun } from "lucide-react";
+import { User, Bell, Palette, Shield, ChevronRight, Moon, Sun, Download, Trash2, RefreshCw } from "lucide-react";
 
 export default function SettingsPage() {
-  const { currentUser } = useApp();
+  const { currentUser, items, shoppingList, deleteItem, deleteShoppingItem, logout } = useApp();
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
   const [notifications, setNotifications] = useState({
     expiringSoon: true,
@@ -12,10 +12,63 @@ export default function SettingsPage() {
     weeklySummary: true,
   });
   const [threshold, setThreshold] = useState(3);
+  const [displayName, setDisplayName] = useState(currentUser?.name ?? "");
+  const [email, setEmail] = useState(currentUser?.email ?? "");
+  const [savedProfile, setSavedProfile] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const toggleDark = () => {
     document.documentElement.classList.toggle("dark");
     setDarkMode(v => !v);
+  };
+
+  const handleSaveProfile = () => {
+    setSavedProfile(true);
+    setTimeout(() => setSavedProfile(false), 2000);
+  };
+
+  const handleExportCSV = () => {
+    const headers = ["ID", "Name", "Category", "Quantity", "Unit", "Expiration Date", "Purchase Date", "Notes"];
+    const rows = items.map(item => [
+      item.id,
+      item.name,
+      item.category,
+      item.quantity,
+      item.unit,
+      item.expirationDate ?? "",
+      item.purchaseDate ?? "",
+      item.notes ?? "",
+    ]);
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `pantry-inventory-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleClearShopping = () => {
+    if (!window.confirm("Clear all shopping list items?")) return;
+    shoppingList.forEach(item => deleteShoppingItem(item.id));
+  };
+
+  const handleResetAllData = () => {
+    if (!confirmReset) {
+      setConfirmReset(true);
+      setTimeout(() => setConfirmReset(false), 4000);
+      return;
+    }
+    localStorage.removeItem("pantry_items");
+    localStorage.removeItem("pantry_shopping");
+    localStorage.removeItem("pantry_user");
+    logout();
+    window.location.reload();
   };
 
   return (
@@ -34,11 +87,11 @@ export default function SettingsPage() {
         <div className="p-5">
           <div className="flex items-center gap-4 mb-5">
             <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center">
-              <span className="text-primary text-2xl font-bold">{currentUser?.name?.charAt(0)}</span>
+              <span className="text-primary text-2xl font-bold">{displayName?.charAt(0) || "U"}</span>
             </div>
             <div>
-              <p className="font-semibold text-foreground" data-testid="text-user-name">{currentUser?.name}</p>
-              <p className="text-sm text-muted-foreground" data-testid="text-user-email">{currentUser?.email}</p>
+              <p className="font-semibold text-foreground" data-testid="text-user-name">{displayName}</p>
+              <p className="text-sm text-muted-foreground" data-testid="text-user-email">{email}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -46,7 +99,8 @@ export default function SettingsPage() {
               <label className="text-xs font-medium text-muted-foreground block mb-1.5">Display Name</label>
               <input
                 type="text"
-                defaultValue={currentUser?.name}
+                value={displayName}
+                onChange={e => setDisplayName(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                 data-testid="input-display-name"
               />
@@ -55,14 +109,19 @@ export default function SettingsPage() {
               <label className="text-xs font-medium text-muted-foreground block mb-1.5">Email</label>
               <input
                 type="email"
-                defaultValue={currentUser?.email}
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                 data-testid="input-email-settings"
               />
             </div>
           </div>
-          <button className="mt-4 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:opacity-90 transition-all" data-testid="button-save-profile">
-            Save Profile
+          <button
+            onClick={handleSaveProfile}
+            className={`mt-4 px-4 py-2 text-sm font-medium rounded-xl transition-all ${savedProfile ? "bg-green-500 text-white" : "bg-primary text-primary-foreground hover:opacity-90"}`}
+            data-testid="button-save-profile"
+          >
+            {savedProfile ? "Saved!" : "Save Profile"}
           </button>
         </div>
       </section>
@@ -149,23 +208,45 @@ export default function SettingsPage() {
           <h3 className="font-semibold text-foreground text-sm">Data & Privacy</h3>
         </div>
         <div className="divide-y divide-border">
-          {[
-            { label: "Export Inventory Data", desc: "Download a CSV of all pantry items" },
-            { label: "Clear Shopping List", desc: "Remove all items from shopping list" },
-            { label: "Reset All Data", desc: "Delete all pantry items and settings" },
-          ].map(({ label, desc }) => (
-            <button
-              key={label}
-              className="w-full flex items-center justify-between px-5 py-4 hover:bg-muted/50 transition-colors text-left"
-              data-testid={`button-${label.toLowerCase().replace(/ /g, "-")}`}
-            >
-              <div>
-                <p className="font-medium text-foreground text-sm">{label}</p>
-                <p className="text-xs text-muted-foreground">{desc}</p>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            </button>
-          ))}
+          <button
+            onClick={handleExportCSV}
+            className="w-full flex items-center justify-between px-5 py-4 hover:bg-muted/50 transition-colors text-left"
+            data-testid="button-export-inventory-data"
+          >
+            <div>
+              <p className="font-medium text-foreground text-sm">Export Inventory Data</p>
+              <p className="text-xs text-muted-foreground">Download a CSV of all {items.length} pantry items</p>
+            </div>
+            <Download className="w-4 h-4 text-muted-foreground" />
+          </button>
+
+          <button
+            onClick={handleClearShopping}
+            className="w-full flex items-center justify-between px-5 py-4 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors text-left"
+            data-testid="button-clear-shopping-list"
+          >
+            <div>
+              <p className="font-medium text-foreground text-sm">Clear Shopping List</p>
+              <p className="text-xs text-muted-foreground">Remove all {shoppingList.length} items from shopping list</p>
+            </div>
+            <Trash2 className="w-4 h-4 text-orange-500" />
+          </button>
+
+          <button
+            onClick={handleResetAllData}
+            className={`w-full flex items-center justify-between px-5 py-4 transition-colors text-left ${confirmReset ? "bg-destructive/10 hover:bg-destructive/20" : "hover:bg-destructive/5"}`}
+            data-testid="button-reset-all-data"
+          >
+            <div>
+              <p className={`font-medium text-sm ${confirmReset ? "text-destructive" : "text-foreground"}`}>
+                {confirmReset ? "Click again to confirm reset" : "Reset All Data"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {confirmReset ? "This cannot be undone!" : "Delete all pantry items and settings"}
+              </p>
+            </div>
+            <RefreshCw className={`w-4 h-4 ${confirmReset ? "text-destructive" : "text-muted-foreground"}`} />
+          </button>
         </div>
       </section>
     </div>

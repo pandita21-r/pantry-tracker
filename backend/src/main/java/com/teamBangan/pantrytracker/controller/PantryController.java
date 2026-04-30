@@ -1,7 +1,7 @@
-package com.example.pantrytracker.controller;
+package com.teamBangan.pantrytracker.controller;
 
-import com.example.pantrytracker.model.PantryItem;
-import com.example.pantrytracker.repository.PantryRepository;
+import com.teamBangan.pantrytracker.model.PantryItem;
+import com.teamBangan.pantrytracker.repository.PantryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController // Tells Spring this class handles API requests
 @RequestMapping("/api/pantry") // The base URL for all endpoints in this file
-@CrossOrigin(origins = "http://localhost:3000") // Allows your Frontend to talk to this Backend
+@CrossOrigin(origins = "http://localhost:5173") // Allows your Frontend to talk to this Backend
 public class PantryController {
 
     @Autowired

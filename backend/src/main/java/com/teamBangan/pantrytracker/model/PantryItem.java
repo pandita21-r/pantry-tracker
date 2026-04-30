@@ -1,5 +1,5 @@
 
-package com.example.pantrytracker.model;
+package com.teamBangan.pantrytracker.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public class PantryItem {
     @Column(nullable = false) // Ensures the name is never empty
     private String name;
 
-    private Integer quantity;
+    private Double quantity;
 
     private String category;
 
@@ -24,7 +24,7 @@ public class PantryItem {
     // --- CONSTRUCTORS ---
     public PantryItem() {}
 
-    public PantryItem(String name, Integer quantity, String category, LocalDate expirationDate) {
+    public PantryItem(String name, Double quantity, String category, LocalDate expirationDate) {
         this.name = name;
         this.quantity = quantity;
         this.category = category;
@@ -40,8 +40,8 @@ public class PantryItem {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Double getQuantity() { return quantity; }
+    public void setQuantity(Double quantity) { this.quantity = quantity; }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }

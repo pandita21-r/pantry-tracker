@@ -1,6 +1,6 @@
-package com.example.pantrytracker.repository;
+package com.teamBangan.pantrytracker.repository;
 
-import com.example.pantrytracker.model.PantryItem;
+import com.teamBangan.pantrytracker.model.PantryItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

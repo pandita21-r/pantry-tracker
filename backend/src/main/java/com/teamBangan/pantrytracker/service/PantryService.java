@@ -1,7 +1,7 @@
-package com.example.pantrytracker.service;
+package com.teamBangan.pantrytracker.service;
 
-import com.example.pantrytracker.model.PantryItem;
-import com.example.pantrytracker.repository.PantryRepository;
+import com.teamBangan.pantrytracker.model.PantryItem;
+import com.teamBangan.pantrytracker.repository.PantryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

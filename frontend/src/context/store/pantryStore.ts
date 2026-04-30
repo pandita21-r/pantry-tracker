@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { PantryItem, ShoppingItem, Category, User } from "@/types/pantry";
 
 const DEMO_USER: User = {
@@ -133,17 +133,54 @@ const INITIAL_SHOPPING: ShoppingItem[] = [
   { id: "s3", name: "Coffee Beans", category: "Beverages", quantity: 1, unit: "bag", checked: true, addedAt: new Date().toISOString() },
 ];
 
+function loadFromStorage<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw) as T;
+  } catch {
+  }
+  return fallback;
+}
+
+function saveToStorage<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+  }
+}
+
 export function usePantryStore() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [items, setItems] = useState<PantryItem[]>(INITIAL_ITEMS);
-  const [shoppingList, setShoppingList] = useState<ShoppingItem[]>(INITIAL_SHOPPING);
+  const [currentUser, setCurrentUser] = useState<User | null>(() =>
+    loadFromStorage<User | null>("pantry_user", null)
+  );
+  const [items, setItems] = useState<PantryItem[]>(() =>
+    loadFromStorage<PantryItem[]>("pantry_items", INITIAL_ITEMS)
+  );
+  const [shoppingList, setShoppingList] = useState<ShoppingItem[]>(() =>
+    loadFromStorage<ShoppingItem[]>("pantry_shopping", INITIAL_SHOPPING)
+  );
+
+  useEffect(() => {
+    saveToStorage("pantry_user", currentUser);
+  }, [currentUser]);
+
+  useEffect(() => {
+    saveToStorage("pantry_items", items);
+  }, [items]);
+
+  useEffect(() => {
+    saveToStorage("pantry_shopping", shoppingList);
+  }, [shoppingList]);
 
   const login = useCallback((email: string, _password: string) => {
-    setCurrentUser({ ...DEMO_USER, email });
+    const user = { ...DEMO_USER, email };
+    setCurrentUser(user);
+    saveToStorage("pantry_user", user);
   }, []);
 
   const logout = useCallback(() => {
     setCurrentUser(null);
+    saveToStorage("pantry_user", null);
   }, []);
 
   const addItem = useCallback((item: Omit<PantryItem, "id" | "addedAt" | "updatedAt">) => {
@@ -153,22 +190,32 @@ export function usePantryStore() {
       addedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    setItems(prev => [newItem, ...prev]);
+    setItems(prev => {
+      const updated = [newItem, ...prev];
+      saveToStorage("pantry_items", updated);
+      return updated;
+    });
     return newItem;
   }, []);
 
   const updateItem = useCallback((id: string, updates: Partial<PantryItem>) => {
-    setItems(prev =>
-      prev.map(item =>
+    setItems(prev => {
+      const updated = prev.map(item =>
         item.id === id
           ? { ...item, ...updates, updatedAt: new Date().toISOString() }
           : item
-      )
-    );
+      );
+      saveToStorage("pantry_items", updated);
+      return updated;
+    });
   }, []);
 
   const deleteItem = useCallback((id: string) => {
-    setItems(prev => prev.filter(item => item.id !== id));
+    setItems(prev => {
+      const updated = prev.filter(item => item.id !== id);
+      saveToStorage("pantry_items", updated);
+      return updated;
+    });
   }, []);
 
   const addShoppingItem = useCallback((item: Omit<ShoppingItem, "id" | "addedAt">) => {
@@ -177,35 +224,56 @@ export function usePantryStore() {
       id: Date.now().toString(),
       addedAt: new Date().toISOString(),
     };
-    setShoppingList(prev => [newItem, ...prev]);
+    setShoppingList(prev => {
+      const updated = [newItem, ...prev];
+      saveToStorage("pantry_shopping", updated);
+      return updated;
+    });
   }, []);
 
   const toggleShoppingItem = useCallback((id: string) => {
-    setShoppingList(prev =>
-      prev.map(item => item.id === id ? { ...item, checked: !item.checked } : item)
-    );
+    setShoppingList(prev => {
+      const updated = prev.map(item => item.id === id ? { ...item, checked: !item.checked } : item);
+      saveToStorage("pantry_shopping", updated);
+      return updated;
+    });
   }, []);
 
   const deleteShoppingItem = useCallback((id: string) => {
-    setShoppingList(prev => prev.filter(item => item.id !== id));
+    setShoppingList(prev => {
+      const updated = prev.filter(item => item.id !== id);
+      saveToStorage("pantry_shopping", updated);
+      return updated;
+    });
   }, []);
 
   const moveShoppingItemToPantry = useCallback((shoppingItemId: string) => {
-    const shoppingItem = shoppingList.find(i => i.id === shoppingItemId);
-    if (!shoppingItem) return;
-    const newPantryItem: PantryItem = {
-      id: Date.now().toString(),
-      name: shoppingItem.name,
-      category: shoppingItem.category,
-      quantity: shoppingItem.quantity,
-      unit: shoppingItem.unit,
-      purchaseDate: new Date().toISOString().split("T")[0],
-      addedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setItems(prev => [newPantryItem, ...prev]);
-    setShoppingList(prev => prev.filter(item => item.id !== shoppingItemId));
-  }, [shoppingList]);
+    setShoppingList(prevShopping => {
+      const shoppingItem = prevShopping.find(i => i.id === shoppingItemId);
+      if (!shoppingItem) return prevShopping;
+
+      const newPantryItem: PantryItem = {
+        id: Date.now().toString(),
+        name: shoppingItem.name,
+        category: shoppingItem.category,
+        quantity: shoppingItem.quantity,
+        unit: shoppingItem.unit,
+        purchaseDate: new Date().toISOString().split("T")[0],
+        addedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      setItems(prevItems => {
+        const updated = [newPantryItem, ...prevItems];
+        saveToStorage("pantry_items", updated);
+        return updated;
+      });
+
+      const updatedShopping = prevShopping.filter(item => item.id !== shoppingItemId);
+      saveToStorage("pantry_shopping", updatedShopping);
+      return updatedShopping;
+    });
+  }, []);
 
   const getExpirationStatus = useCallback((item: PantryItem) => {
     if (!item.expirationDate) return "no-date";
