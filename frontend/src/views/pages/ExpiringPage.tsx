@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { useApp } from "@/context/AppContext";
-import CategoryIcon from "@/views/components/CategoryIcon";
-import ExpirationBadge from "@/views/components/ExpirationBadge";
+import { useApp } from "../../context/AppContext";
+import  CategoryIcon  from "../components/CategoryIcon";
+import  ExpirationBadge  from "../components/ExpirationBadge";
 import { AlertTriangle, XCircle, ShoppingCart, Trash2 } from "lucide-react";
-import type { PantryItem } from "@/types/pantry";
+import type { PantryItem } from "../../types/pantry";
 
 interface ExpiringPageProps {
   searchQuery: string;
@@ -57,7 +57,7 @@ export default function ExpiringPage({ searchQuery }: ExpiringPageProps) {
               <p className="font-semibold text-foreground text-sm" data-testid={`text-expiring-name-${item.id}`}>{item.name}</p>
               <p className="text-xs text-muted-foreground">{item.quantity} {item.unit} · {item.category}</p>
             </div>
-            <ExpirationBadge status={status} date={item.expirationDate} />
+            <ExpirationBadge status={status} date={item.expiryDate} />
           </div>
           {item.notes && <p className="text-xs text-muted-foreground italic truncate">{item.notes}</p>}
         </div>

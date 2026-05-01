@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useApp } from "@/context/AppContext";
-import type { Category, PantryItem } from "@/types/pantry";
+import { useApp } from "../../context/AppContext";
+import type { Category, PantryItem } from "../../types/pantry";
 import { X, Save } from "lucide-react";
 
 const CATEGORIES: Category[] = [

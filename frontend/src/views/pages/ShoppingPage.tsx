@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useApp } from "@/context/AppContext";
-import type { Category } from "@/types/pantry";
-import CategoryIcon from "@/views/components/CategoryIcon";
+import { useApp } from "../../context/AppContext";
+import type { Category } from "../../types/pantry";
+import CategoryIcon from "../components/CategoryIcon";
 import { Plus, Trash2, CheckSquare, Square, ShoppingBag, Package } from "lucide-react";
 
 const CATEGORIES: Category[] = [

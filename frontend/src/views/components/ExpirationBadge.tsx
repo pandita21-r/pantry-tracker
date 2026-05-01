@@ -1,4 +1,4 @@
-import type { ExpirationStatus } from "@/types/pantry";
+import type { ExpirationStatus } from "../../types/pantry";
 import { AlertTriangle, CheckCircle, XCircle, Calendar } from "lucide-react";
 
 interface ExpirationBadgeProps {

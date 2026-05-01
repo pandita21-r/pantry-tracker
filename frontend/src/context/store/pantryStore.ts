@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import type { PantryItem, ShoppingItem, Category, User } from "@/types/pantry";
+import type { PantryItem, ShoppingItem, Category, User } from "../../types/pantry";
 
 const DEMO_USER: User = {
   name: "Alex Johnson",

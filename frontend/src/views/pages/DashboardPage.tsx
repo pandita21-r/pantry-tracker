@@ -1,8 +1,15 @@
-import { useApp } from "@/context/AppContext";
-import { CATEGORY_COLORS } from "@/views/components/CategoryIcon";
-import ExpirationBadge from "@/views/components/ExpirationBadge";
-import CategoryIcon from "@/views/components/CategoryIcon";
-import type { Category } from "@/types/pantry";
+// 1. Go up two levels to reach src/, then into context/
+import { useApp } from "../../context/AppContext";
+
+// 2. Go up one level to reach views/, then into components/
+import { CATEGORY_COLORS } from "../components/CategoryIcon";
+import ExpirationBadge from "../components/ExpirationBadge";
+import CategoryIcon from "../components/CategoryIcon";
+
+// 3. Go up two levels to reach src/, then into types/
+import type { Category } from "../../types/pantry";
+
+// 4. Lucide-react stays the same
 import { Package, AlertTriangle, TrendingDown, ShoppingCart, Clock, Leaf } from "lucide-react";
 
 interface DashboardPageProps {

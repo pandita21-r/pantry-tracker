@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useApp } from "@/context/AppContext";
-import type { PantryItem } from "@/types/pantry";
+import { useApp } from "../../context/AppContext";
+import type { PantryItem } from "../../types/pantry";
 import CategoryIcon from "./CategoryIcon";
 import ExpirationBadge from "./ExpirationBadge";
 import { Pencil, Trash2, Plus, Minus, ShoppingCart } from "lucide-react";

@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from "react";
-import { usePantryStore, type PantryStore } from "@/store/pantryStore";
+import { usePantryStore } from "./store/pantryStore";
 
 const AppContext = createContext<PantryStore | null>(null);
 

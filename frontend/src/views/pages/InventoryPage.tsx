@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
-import { useApp } from "@/context/AppContext";
-import PantryItemCard from "@/views/components/PantryItemCard";
-import AddItemModal from "@/views/components/AddItemModal";
+import { useApp } from "../../context/AppContext";
+import  PantryItemCard  from "../components/PantryItemCard";
+import  AddItemModal  from "../components/AddItemModal";
 import type { PantryItem, Category, ExpirationStatus, SortField, SortOrder } from "@/types/pantry";
 import { Filter, SortAsc, SortDesc, LayoutGrid, List } from "lucide-react";
 

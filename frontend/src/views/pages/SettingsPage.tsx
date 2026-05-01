@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "../../context/AppContext";
 import { User, Bell, Palette, Shield, ChevronRight, Moon, Sun, Download, Trash2, RefreshCw } from "lucide-react";
 
 export default function SettingsPage() {

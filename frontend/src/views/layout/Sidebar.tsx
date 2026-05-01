@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "../../context/AppContext";
 import {
   LayoutDashboard, Package, ShoppingCart, AlertTriangle,
   LogOut, Leaf, Settings, X, ChevronRight

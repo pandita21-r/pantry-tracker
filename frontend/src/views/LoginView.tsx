@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "../context/AppContext";
 import { Leaf, Eye, EyeOff, ShoppingCart, Clock, TrendingDown } from "lucide-react";
 
 export default function LoginView() {

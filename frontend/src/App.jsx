@@ -1,60 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import { Switch, Route, Redirect } from "wouter";
+import { useApp } from "./context/AppContext";
+// Layouts
+import AppLayout from "./views/layout/AppLayout";
+// Pages
+import LoginView from "./views/LoginView"; // This is your Landing Page
+import DashboardPage from "./views/pages/DashboardPage";
+import InventoryPage from "./views/pages/InventoryPage";
+import ShoppingPage from "./views/pages/ShoppingPage";
+import SettingsPage from "./views/pages/SettingsPage";
+import ExpiringPage from "./views/pages/ExpiringPage";
+import NotFoundPage from "./views/pages/NotFoundPage";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [items, setItems] = useState([]);
+export default function App() {
+  const { currentUser } = useApp();
 
-  // This connects to your JAVA BACKEND
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetch('http://localhost:8080/api/pantry')
-        .then(res => res.json())
-        .then(data => setItems(data))
-        .catch(err => console.error("Backend not running on 8080!"));
-    }
-  }, [isLoggedIn]);
-
-  if (isLoggedIn) {
+  // 1. If NOT logged in, show ONLY LoginView (Landing Page)
+  if (!currentUser) {
     return (
-      <div className="dashboard-container">
-        <h1>🌿 Pantry Inventory</h1>
-        <table>
-          <thead>
-            <tr><th>ID</th><th>Item Name</th><th>Quantity</th></tr>
-          </thead>
-          <tbody>
-            {items.map(item => (
-              <tr key={item.id}><td>{item.id}</td><td>{item.name}</td><td>{item.quantity}</td></tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={() => setIsLoggedIn(false)} className="sign-in-btn" style={{marginTop: '20px'}}>Logout</button>
-      </div>
+      <Switch>
+        <Route path="/login" component={LoginView} />
+        <Route>
+          <Redirect to="/login" />
+        </Route>
+      </Switch>
     );
   }
 
+  // 2. Once logged in, show the AppLayout (Sidebar/Topbar) and Pages
   return (
-    <div className="login-container">
-      <div className="hero-section">
-        <div className="logo">🌿 PantryTrack</div>
-        <h1>Smarter kitchen.<br/>Zero food waste.</h1>
-        <p>Track every item in your pantry in real time.</p>
-      </div>
-      <div className="form-section">
-        <div className="login-box">
-          <h2>Welcome back</h2>
-          <form onSubmit={(e) => { e.preventDefault(); setIsLoggedIn(true); }}>
-            <label>Email</label>
-            <input type="email" placeholder="alex@example.com" required />
-            <label>Password</label>
-            <input type="password" placeholder="••••••••" required />
-            <button type="submit" className="sign-in-btn">Sign in</button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <AppLayout>
+      <Switch>
+        <Route path="/" component={DashboardPage} />
+        <Route path="/inventory" component={InventoryPage} />
+        <Route path="/expiring" component={ExpiringPage} />
+        <Route path="/shopping" component={ShoppingPage} />
+        <Route path="/settings" component={SettingsPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+    </AppLayout>
   );
 }
-// fd
-export default App;

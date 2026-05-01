@@ -1,4 +1,4 @@
-import type { Category } from "@/types/pantry";
+import type { Category } from "../../types/pantry";
 
 const CATEGORY_COLORS: Record<Category, { bg: string; text: string; emoji: string }> = {
   "Produce": { bg: "bg-green-100 dark:bg-green-900/40", text: "text-green-700 dark:text-green-400", emoji: "🥦" },
