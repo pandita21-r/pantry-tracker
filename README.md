@@ -485,16 +485,16 @@ LANDING PAGE / LOGIN PAGE
 DASHBOARD
 <img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/a7469a12-6a14-4613-8a9e-7a2aec5de1bc" />
 
-
+INVENTORY
 <img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/189f5bed-15ca-44ff-bbde-66e41c5d11da" />
 
-
+EXPIRING LIST
 <img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/dd27db8c-fd83-4670-9c11-4eb1860d752f" />
 
-
+SHOPPING LIST
 <img width="1280" height="720" alt="tviSZBx" src="https://github.com/user-attachments/assets/03817c35-3ef2-4984-958d-5c3c8f91a6a4" />
 
-
+SETTINGS
 <img width="1280" height="720" alt="ISEnPU5" src="https://github.com/user-attachments/assets/fd270057-323a-4c37-b830-85d19f6dd129" />
 
 
