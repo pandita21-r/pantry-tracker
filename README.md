@@ -472,3 +472,16 @@ Quick Reference Card (Print This)
 └────────────────────────────────────────────────────┘
 
 PantryTrack | Team Bangan | CCE Week Vibe Coding Competition
+
+
+PROGRAM SCREENSHOTS:
+<img width="1280" height="720" alt="XcTDxmJ" src="https://github.com/user-attachments/assets/9d80c629-d34a-4632-b20d-235767b5febd" />
+<img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/a7469a12-6a14-4613-8a9e-7a2aec5de1bc" />
+<img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/189f5bed-15ca-44ff-bbde-66e41c5d11da" />
+<img width="1280" height="720" alt="CHc7e54" src="https://github.com/user-attachments/assets/dd27db8c-fd83-4670-9c11-4eb1860d752f" />
+<img width="1280" height="720" alt="tviSZBx" src="https://github.com/user-attachments/assets/03817c35-3ef2-4984-958d-5c3c8f91a6a4" />
+<img width="1280" height="720" alt="ISEnPU5" src="https://github.com/user-attachments/assets/fd270057-323a-4c37-b830-85d19f6dd129" />
+
+
+
+
